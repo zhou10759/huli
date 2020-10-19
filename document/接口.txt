@@ -1,0 +1,25 @@
+1.订单判断体验订单 experience   1是体验订单
+2.老师登录后 返回一个teacherType 状态来判断是后台老师 还是经销商老师   0 为后台创建 1是经销商创建
+3.赠送订单 不能大于5次  下单要传给我一个老师的teacherType
+
+
+经销商添加老师 ：   /massage/admin/user/businessAdd
+		userName，type =2 ，phone，password，teacherType=1 ，userId = 经销商id ， id = 经销商登录的时候返给前端的省份id
+
+经销商登录：type 传入3  会多返回  teacherType  和 provincialId 
+
+//businessList 增加一个参数   provincialId 
+
+经销商查询自己创建的老师列表 /admin/user/findBusinessManage    page ， pageSize ，type=2，teacherType = 1，userId=当前经销商id
+经销商删除老师     /admin/user/deleteBusiness   userId = 老师id
+经销商修改老师   /admin/user/updateBusiness  userName，phone，password 
+
+
+agentId省份id
+经销商查看店铺列表 
+/admin/user/findBusinessManage?page=' + page + '&pageSize=' + pageSize + '&type=1&agentId='+id
+经销商查看店铺订单   userId 店铺id
+/admin/user/findOrder?page=' + page + '&pageSize=' + pageSize + '&orderName=' + orderName + '&userId='+userId+ '&projectName='+projectName
+
+
+未做 价格区间后台设置 和接口 

@@ -1,19 +1,20 @@
 <template>
   <div class="login">
     <div class="login-header">
-      <div class="header-btn" v-for="(el,i) in navBar" :key="i">
+      <div class="header-btn" v-for="(el, i) in navBar" :key="i">
         <van-button
           @click="toggleIdentity(i)"
           round
           block
-          :color="actionIndex===i?'#494949':''"
-        >{{el}}</van-button>
+          :color="actionIndex === i ? '#494949' : ''"
+          >{{ el }}</van-button
+        >
       </div>
     </div>
     <div class="login-content">
       <div class="content-form">
         <!-- 顾客登录 -->
-        <div class="form-customer" v-show="actionIndex==0">
+        <div class="form-customer" v-show="actionIndex == 0">
           <van-form @submit="onCustomerSubmit">
             <van-field
               v-model="customerList.userName"
@@ -52,12 +53,13 @@
                 round
                 block
                 native-type="submit"
-              >提交</van-button>
+                >提交</van-button
+              >
             </div>
           </van-form>
         </div>
         <!-- 商家登录 -->
-        <div class="form-business" v-show="actionIndex==1">
+        <div class="form-business" v-show="actionIndex == 1">
           <van-form @submit="onBusinessSubmit">
             <van-field
               v-model="customerList.businessId"
@@ -90,12 +92,13 @@
                 round
                 block
                 native-type="submit"
-              >提交</van-button>
+                >提交</van-button
+              >
             </div>
           </van-form>
         </div>
         <!-- 老师登录 -->
-        <div class="form-teacher" v-show="actionIndex==2">
+        <div class="form-teacher" v-show="actionIndex == 2">
           <!-- <van-form @submit="onTeacherSubmit"> -->
           <van-field
             v-model="teacherList.userPhone"
@@ -110,7 +113,10 @@
             placeholder="请输入老师身份码"
             :rules="[{ required: true, message: '请输入老师身份码' }]"
           />
-          <Search :businessList="businessData" v-on:changeBusinessVal="changeBusinessVal" />
+          <Search
+            :businessList="businessData"
+            v-on:changeBusinessVal="changeBusinessVal"
+          />
           <!-- <van-field
               readonly
               clickable
@@ -150,7 +156,8 @@
               round
               block
               @click="onTeacherSubmit"
-            >提交</van-button>
+              >提交</van-button
+            >
           </div>
           <div class="login-sub btn2">
             <van-button
@@ -158,9 +165,37 @@
               round
               block
               @click="jumpEquipment"
-            >添加设备</van-button>
+              >添加设备</van-button
+            >
           </div>
           <!-- </van-form> -->
+        </div>
+        <!-- 经销商 -->
+        <div class="form-teacher" v-show="actionIndex == 3">
+          <van-form @submit="onDistributionSubmit">
+            <van-field
+              v-model="teacherList.userPhone"
+              name="userPhone"
+              placeholder="请输入经销商ID"
+              :rules="[{ pattern: phoneReg, message: '老师ID格式错误' }]"
+            />
+            <van-field
+              v-model="teacherList.password"
+              name="password"
+              type="password"
+              placeholder="请输入经销商身份码"
+              :rules="[{ required: true, message: '请输入老师身份码' }]"
+            />
+            <div class="login-sub btn1">
+              <van-button
+                color="linear-gradient(to right, #6F6F6F , #414141)"
+                round
+                block
+                native-type="submit"
+                >提交</van-button
+              >
+            </div>
+          </van-form>
         </div>
       </div>
     </div>
@@ -182,7 +217,7 @@ export default {
   components: { Search },
   data() {
     return {
-      navBar: ["顾客", "商家", "老师"],
+      navBar: ["顾客", "商家", "老师", "经销商"],
       actionIndex: 0,
       customerList: {
         userName: "",
@@ -280,7 +315,6 @@ export default {
     },
     formatData(type, data) {
       let newData = JSON.parse(JSON.stringify(data));
-      console.log("newData", newData);
       if (type === 1) {
         //顾客
         newData.type = 0;
@@ -311,6 +345,9 @@ export default {
         // });
         // let list = this.changeBusinessVal();
         // newData.businessId = this.changeBusinessVal();
+        return newData;
+      } else if (type === 4) {
+        newData.type = 3;
         return newData;
       }
     },
@@ -383,21 +420,21 @@ export default {
       // let isOverdue = false;
       // if (code == "000000") {
       //   this.openId = data;
-        // isOverdue = false;
-        login(this.formatData(1, values)).then((res) => {
-          if (res.code === "000000") {
-            localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
-            Toast.success({
-              duration: 500,
-              message: "登录成功",
-              onClose: function () {
-                that.$router.push("customerPage");
-              },
-            });
-          } else {
-            Toast.fail(res.msg);
-          }
-        });
+      // isOverdue = false;
+      login(this.formatData(1, values)).then((res) => {
+        if (res.code === "000000") {
+          localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
+          Toast.success({
+            duration: 500,
+            message: "登录成功",
+            onClose: function () {
+              that.$router.push("customerPage");
+            },
+          });
+        } else {
+          Toast.fail(res.msg);
+        }
+      });
       // } else if (code == "000001") {
       //   // isOverdue = true;
       //   Toast.fail("code已过期，立即重新获取");
@@ -475,6 +512,37 @@ export default {
         }
       });
     },
+    onDistributionSubmit(values) {
+      console.log("大叔大婶的——————————————————————————————", values);
+      // 经销商
+      let that = this;
+      if (!this.teacherList.userPhone) {
+        Toast.fail("手机号码有误！");
+        return;
+      }
+      if (!this.teacherList.password) {
+        Toast.fail("密码有误！");
+        return;
+      }
+      login(this.formatData(4, values)).then((res) => {
+        if (res.code === "000000") {
+          localStorage.setItem("userInfo", JSON.stringify(res.data.userInfo));
+          // Toast.success("登录成功！");
+          Toast.success({
+            duration: 500,
+            message: "登录成功",
+            onClose: function () {
+              that.$router.push("distribution");
+            },
+          });
+          // setTimeout(() => {
+          //   that.$router.push("teacher");
+          // }, 500);
+        } else {
+          Toast.fail(res.msg);
+        }
+      });
+    },
     jumpEquipment() {
       this.$router.push("addEquipment");
     },
@@ -497,10 +565,14 @@ export default {
   line-height: 150px;
 }
 .login-header {
-  padding: 0 175px;
+  /* padding: 0 175px; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 .header-btn {
   height: 80px;
+  width: 40%;
   margin-bottom: 40px;
   font-size: 32px;
 }
