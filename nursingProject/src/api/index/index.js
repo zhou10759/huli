@@ -1,6 +1,16 @@
 import axios from "../config.js"
 
 
+// 店铺订单
+export function findOrder(data) {
+  const url = "/massage/admin/user/findOrder"
+  return axios.post(url, data)
+}
+// 店铺列表
+// export function findBusinessManage(data) {
+//   const url = "/massage/admin/user/findBusinessManage"
+//   return axios.post(url, data)
+// }
 // 删除老师
 export function deleteBusiness(data) {
   const url = "/massage/admin/user/deleteBusiness"

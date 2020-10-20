@@ -16,9 +16,9 @@
         <img src="../../../static/quit.png" @click="quit()" alt />
       </div>
     </div>
-    <div class="line"></div>
-    <div class="order-list">
-      <div class="order-items" v-for="(el, i) in teacherList" :key="i">
+    <div class="line" style="margin-top: 30px;"></div>
+    <div class="teacher-list" v-if="teacherList.length>0">
+      <div class="teacher-items" v-for="(el, i) in teacherList" :key="i">
         <div>
           <div style="text-align: left">
             <span class="items-title">姓名：</span> {{ el.userName }}
@@ -46,6 +46,7 @@
         </div>
       </div>
     </div>
+    <van-empty description="暂无数据" v-else> </van-empty>
     <van-pagination
       v-model="currentPage"
       :total-items="total"
@@ -237,6 +238,9 @@ export default {
 </script>
 
 <style>
+.header-name{
+  color: #fff;
+}
 .distribution-nav {
   position: fixed;
   top: 0;
@@ -284,7 +288,6 @@ export default {
 }
 
 .line {
-  margin-top: 100px;
   height: 30px;
   background-color: #f8f8f8;
 }
@@ -321,10 +324,10 @@ export default {
 .search-btn {
   width: 15%;
 }
-.order-list {
+.teacher-list {
   padding: 30px;
 }
-.order-items {
+.teacher-items {
   padding: 15px;
   border: 2px solid #666;
   margin-bottom: 20px;
@@ -380,5 +383,12 @@ export default {
   width: 120px;
   text-align: justify;
   text-align-last: justify;
+}
+.distribution .van-empty__image {
+  width: 4.133333rem;
+  height: 4.133333rem;
+}
+.distribution .van-empty__description {
+  font-size: 0.366667rem;
 }
 </style>

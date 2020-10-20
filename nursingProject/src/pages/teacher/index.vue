@@ -2,7 +2,15 @@
   <div class="teacher">
     <div class="add-nav">
       <div class="add-order">
-        <van-button plain hairline type="primary" round block @click="$router.push('allOrder')">所有订单</van-button>
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="$router.push('allOrder')"
+          >所有订单</van-button
+        >
       </div>
       <div class="add-btn">
         <van-button
@@ -11,16 +19,24 @@
           type="primary"
           round
           block
-          @click="showPicker2=true;isBtnStatus=0;"
-        >到店</van-button>
+          @click="
+            showPicker2 = true;
+            isBtnStatus = 0;
+          "
+          >到店</van-button
+        >
         <van-button
           plain
           hairline
           type="primary"
           round
           block
-          @click="showPicker2=true;isBtnStatus=1;"
-        >离店</van-button>
+          @click="
+            showPicker2 = true;
+            isBtnStatus = 1;
+          "
+          >离店</van-button
+        >
         <van-popup v-model="showPicker2" position="bottom">
           <van-picker
             show-toolbar
@@ -40,7 +56,11 @@
         <div class="form-items">
           <div class="form-title">老师ID</div>
           <van-cell-group>
-            <van-field v-model="teacherId" :disabled="true" placeholder="请输入老师ID" />
+            <van-field
+              v-model="teacherId"
+              :disabled="true"
+              placeholder="请输入老师ID"
+            />
           </van-cell-group>
         </div>
         <!-- <div class="form-items">
@@ -85,6 +105,12 @@
     </div>
     <div class="project-message">
       <div class="form-items">
+        <div class="form-title">体 验 订 单</div>
+        <van-cell-group>
+          <van-checkbox v-model="experience">是否为体验订单</van-checkbox>
+        </van-cell-group>
+      </div>
+      <div class="form-items">
         <div class="form-title">姓 &nbsp;&nbsp; &nbsp; &nbsp; 名</div>
         <van-cell-group>
           <van-field v-model="projectList.name" placeholder="请输入姓名" />
@@ -93,73 +119,108 @@
       <div class="form-items">
         <div class="form-title">手 机 尾 号</div>
         <van-cell-group>
-          <van-field v-model="projectList.phone" type="tel" maxlength="4" placeholder="请输入手机尾号后4位" />
-        </van-cell-group>
-      </div>
-      <div class="form-items">
-        <div class="form-title">项 目 名 称</div>
-        <van-cell-group>
-          <van-field v-model="projectList.projectName" placeholder="请输入项目名称" />
-        </van-cell-group>
-      </div>
-      <div class="form-items">
-        <div class="form-title">项 目 次 数</div>
-        <van-cell-group>
-          <van-field type="digit" v-model="projectList.projectNum" placeholder="请输入项目次数" />
-        </van-cell-group>
-      </div>
-      <div class="form-items">
-        <div class="form-title">项 目 时 长</div>
-        <van-cell-group>
-          <van-field type="digit" v-model="projectList.projectTime" placeholder="请输入项目时长" />
-        </van-cell-group>
-      </div>
-      <div class="form-items">
-        <div class="form-title">项 目 金 额</div>
-        <van-cell-group>
-          <van-field type="number" v-model="projectList.projectMoney" placeholder="请输入项目金额" />
-        </van-cell-group>
-      </div>
-      <div class="form-textarea">
-        <div class="form-title">备 &nbsp;&nbsp; &nbsp; &nbsp; 注</div>
-        <van-cell-group>
           <van-field
-            v-model="projectList.remarks"
-            rows="3"
-            autosize
-            type="textarea"
-            maxlength="100"
-            placeholder="请输入备注"
+            v-model="projectList.phone"
+            type="tel"
+            maxlength="4"
+            placeholder="请输入手机尾号后4位"
           />
         </van-cell-group>
       </div>
-      <div class="form-items">
-        <div class="form-title">项 目 优 惠</div>
-        <van-cell-group>
-          <van-checkbox v-model="projectList.give">送</van-checkbox>
-        </van-cell-group>
-      </div>
-      <div v-show="projectList.give">
+      <template v-if="!experience">
         <div class="form-items">
           <div class="form-title">项 目 名 称</div>
           <van-cell-group>
-            <van-field v-model="projectList.giveOrderName" placeholder="请输入项目名称" />
+            <van-field
+              v-model="projectList.projectName"
+              placeholder="请输入项目名称"
+            />
           </van-cell-group>
         </div>
         <div class="form-items">
           <div class="form-title">项 目 次 数</div>
           <van-cell-group>
-            <van-field type="digit" v-model="projectList.giveTotalTimes" placeholder="请输入项目次数" />
+            <van-field
+              type="digit"
+              v-model="projectList.projectNum"
+              placeholder="请输入项目次数"
+            />
           </van-cell-group>
         </div>
         <div class="form-items">
           <div class="form-title">项 目 时 长</div>
           <van-cell-group>
-            <van-field type="digit" v-model="projectList.giveEveryTime" placeholder="请输入项目时长" />
+            <van-field
+              type="digit"
+              v-model="projectList.projectTime"
+              placeholder="请输入项目时长"
+            />
           </van-cell-group>
         </div>
-      </div>
-      <div class="form-date">总时长：{{projectList.projectNum*projectList.projectTime}}分钟</div>
+        <div class="form-items">
+          <div class="form-title">项 目 金 额</div>
+          <van-cell-group>
+            <van-field
+              type="number"
+              v-model="projectList.projectMoney"
+              placeholder="请输入项目金额"
+            />
+          </van-cell-group>
+        </div>
+        <div class="form-textarea">
+          <div class="form-title">备 &nbsp;&nbsp; &nbsp; &nbsp; 注</div>
+          <van-cell-group>
+            <van-field
+              v-model="projectList.remarks"
+              rows="3"
+              autosize
+              type="textarea"
+              maxlength="100"
+              placeholder="请输入备注"
+            />
+          </van-cell-group>
+        </div>
+        <div class="form-items">
+          <div class="form-title">项 目 优 惠</div>
+          <van-cell-group>
+            <van-checkbox v-model="projectList.give">送</van-checkbox>
+          </van-cell-group>
+        </div>
+        <div v-show="projectList.give">
+          <div class="form-items">
+            <div class="form-title">项 目 名 称</div>
+            <van-cell-group>
+              <van-field
+                v-model="projectList.giveOrderName"
+                placeholder="请输入项目名称"
+              />
+            </van-cell-group>
+          </div>
+          <div class="form-items">
+            <div class="form-title">项 目 次 数</div>
+            <van-cell-group>
+              <van-field
+                type="digit"
+                v-model="projectList.giveTotalTimes"
+                placeholder="请输入项目次数"
+              />
+            </van-cell-group>
+          </div>
+          <div class="form-items">
+            <div class="form-title">项 目 时 长</div>
+            <van-cell-group>
+              <van-field
+                type="digit"
+                v-model="projectList.giveEveryTime"
+                placeholder="请输入项目时长"
+              />
+            </van-cell-group>
+          </div>
+        </div>
+        <div class="form-date">
+          总时长：{{ projectList.projectNum * projectList.projectTime }}分钟
+        </div>
+      </template>
     </div>
     <div class="custom-btn">
       <Debounce :time="500" isDebounce>
@@ -168,7 +229,8 @@
           round
           block
           @click="addOrder"
-        >确定</van-button>
+          >确定</van-button
+        >
       </Debounce>
     </div>
   </div>
@@ -208,6 +270,7 @@ export default {
         giveEveryTime: "",
         giveProjectTime: "",
       },
+      experience: false,
       isBtnStatus: null, //0为到店 1为离店
     };
   },
@@ -288,48 +351,71 @@ export default {
       this.showPicker2 = false;
     },
     addOrder() {
-      console.log(111);
       let that = this;
       let query = {};
-      if (!this.projectList.name) {
-        Toast.fail("请输入用户姓名");
-        return;
+      if (this.experience) {
+        if (!this.projectList.name) {
+          Toast.fail("请输入用户姓名");
+          return;
+        }
+        if (!this.projectList.phone) {
+          Toast.fail("请输入用户手机号");
+          return;
+        }
+        query = {
+          userName: this.projectList.name,
+          userPhone: this.projectList.phone,
+          experience: 1,
+          teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType,
+          equipmentId: this.equipmentId,
+          teacherId: this.teacherId,
+          orderType: 1,
+          businessId: this.business,
+          give: 0
+        };
+      } else {
+         if (!this.projectList.name) {
+          Toast.fail("请输入用户姓名");
+          return;
+        }
+        if (!this.projectList.phone) {
+          Toast.fail("请输入用户手机号");
+          return;
+        }
+        if (!this.projectList.projectName) {
+          Toast.fail("请输入项目名称");
+          return;
+        }
+        if (!this.projectList.projectNum) {
+          Toast.fail("请输入项目次数");
+          return;
+        }
+        if (!this.projectList.projectTime) {
+          Toast.fail("请输入项目时长");
+          return;
+        }
+        if (!this.projectList.projectMoney) {
+          Toast.fail("请输入项目金额");
+          return;
+        }
+        query = {
+          orderName: this.projectList.projectName,
+          orderType: 1,
+          price: this.projectList.projectMoney,
+          totalTimes: this.projectList.projectNum,
+          businessId: this.business,
+          userName: this.projectList.name,
+          userPhone: this.projectList.phone,
+          everyTime: this.projectList.projectTime,
+          projectTime:
+            this.projectList.projectNum * this.projectList.projectTime,
+          equipmentId: this.equipmentId,
+          teacherId: this.teacherId,
+          remarks: this.projectList.remarks,
+          teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType
+        };
+        query.give = this.projectList.give ? 1 : 0;
       }
-      if (!this.projectList.phone) {
-        Toast.fail("请输入用户手机号");
-        return;
-      }
-      if (!this.projectList.projectName) {
-        Toast.fail("请输入项目名称");
-        return;
-      }
-      if (!this.projectList.projectNum) {
-        Toast.fail("请输入项目次数");
-        return;
-      }
-      if (!this.projectList.projectTime) {
-        Toast.fail("请输入项目时长");
-        return;
-      }
-      if (!this.projectList.projectMoney) {
-        Toast.fail("请输入项目金额");
-        return;
-      }
-      query = {
-        orderName: this.projectList.projectName,
-        orderType: 1,
-        price: this.projectList.projectMoney,
-        totalTimes: this.projectList.projectNum,
-        businessId: this.business,
-        userName: this.projectList.name,
-        userPhone: this.projectList.phone,
-        everyTime: this.projectList.projectTime,
-        projectTime: this.projectList.projectNum * this.projectList.projectTime,
-        equipmentId: this.equipmentId,
-        teacherId: this.teacherId,
-        remarks: this.projectList.remarks,
-      };
-      query.give = this.projectList.give ? 1 : 0;
       if (this.projectList.give) {
         if (!this.projectList.giveOrderName) {
           Toast.fail("请输入项目次数");
