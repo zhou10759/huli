@@ -513,7 +513,6 @@ export default {
       });
     },
     onDistributionSubmit(values) {
-      console.log("大叔大婶的——————————————————————————————", values);
       // 经销商
       let that = this;
       if (!this.teacherList.userPhone) {

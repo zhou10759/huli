@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/message/api': { //这里的key就是axios的baseURL
+      '/message': { //这里的key就是axios的baseURL
         target: 'http://massage.1mmkj.com', //访问域名
         changeOrigin: true, //开启跨域
         pathRewrite: { // 路径重写，
-          '^/message/api': '' // 替换target中的请求地址
+          '^/message': '' // 替换target中的请求地址
         }
       }
     },

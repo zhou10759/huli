@@ -9,6 +9,7 @@ const AddEquipment = r => require.ensure([], () => r(require('@/pages/teacher/ad
 const Teacher = r => require.ensure([], () => r(require('@/pages/teacher/index')), 'index');
 const AllOrder = r => require.ensure([], () => r(require('@/pages/teacher/allOrder')), 'allOrder');
 const Distribution = r => require.ensure([], () => r(require('@/pages/distribution/index')), 'distribution');
+const TeacherList = r => require.ensure([], () => r(require('@/pages/distribution/teacherList')), 'teacherList');
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -51,6 +52,11 @@ export default new Router({
       path: '/distribution',
       name: 'distribution',
       component: Distribution
+    },
+    {
+      path: '/teacherList',
+      name: 'teacherList',
+      component: TeacherList
     }
   ]
 })

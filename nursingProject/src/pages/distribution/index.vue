@@ -8,8 +8,8 @@
           type="primary"
           round
           block
-          @click="$router.push('allOrder')"
-          >所有订单</van-button
+          @click="$router.push('teacherList')"
+          >老师列表</van-button
         >
       </div>
       <div class="distribution-quit">

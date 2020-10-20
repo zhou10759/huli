@@ -1,5 +1,29 @@
 import axios from "../config.js"
 
+
+// 删除老师
+export function deleteBusiness(data) {
+  const url = "/massage/admin/user/deleteBusiness"
+  return axios.post(url, data)
+}
+// 修改老师
+export function updateBusiness(data) {
+  const url = "/massage/admin/user/updateBusiness"
+  return axios.post(url, data)
+}
+// 老师列表
+export function findBusinessManage(data) {
+  const url = "/massage/admin/user/findBusinessManage"
+  return axios.post(url, data)
+}
+
+// 添加老师
+export function businessAdd(data) {
+  const url = "/massage/admin/user/businessAdd"
+  return axios.post(url, data)
+}
+
+
 // 商家列表
 export function businessList(data) {
   const url = "/massage/api/business/businessList"
