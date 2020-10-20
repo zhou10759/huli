@@ -1,6 +1,12 @@
 import axios from "../config.js"
 
 
+
+// 获取价格区间
+export function rangeList(data) {
+  const url = "/massage/api/project/rangeList"
+  return axios.post(url, data)
+}
 // 店铺订单
 export function findOrder(data) {
   const url = "/massage/admin/user/findOrder"

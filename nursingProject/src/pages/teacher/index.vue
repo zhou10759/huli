@@ -241,6 +241,7 @@ import {
   businessList,
   equipmentList,
   teacherToShop,
+  rangeList,
 } from "../../api/index/index";
 import { Toast } from "vant";
 export default {
@@ -273,6 +274,29 @@ export default {
       experience: false,
       isBtnStatus: null, //0为到店 1为离店
     };
+  },
+  watch: {
+    "projectList.projectMoney": {
+      handler: function (val, oldval) {
+        //do something
+        if (JSON.parse(localStorage.getItem("userInfo")).teacherType === 1) {
+          //经销商老师
+          rangeList({
+            price: parseInt(val),
+            provincialId: JSON.parse(localStorage.getItem("userInfo"))
+              .provincialId,
+          }).then((res) => {
+            if (res.code === "000000") {
+              this.projectList.projectNum = res.data.totalTimes;
+              this.projectList.projectTime = res.data.everyTime;
+            } else if (res.code === "000001") {
+              this.projectList.projectNum = "";
+              this.projectList.projectTime = "";
+            }
+          });
+        }
+      },
+    },
   },
   created() {
     document.title = "老师自定义模式";
@@ -371,10 +395,10 @@ export default {
           teacherId: this.teacherId,
           orderType: 1,
           businessId: this.business,
-          give: 0
+          give: 0,
         };
       } else {
-         if (!this.projectList.name) {
+        if (!this.projectList.name) {
           Toast.fail("请输入用户姓名");
           return;
         }
@@ -412,7 +436,7 @@ export default {
           equipmentId: this.equipmentId,
           teacherId: this.teacherId,
           remarks: this.projectList.remarks,
-          teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType
+          teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType,
         };
         query.give = this.projectList.give ? 1 : 0;
       }
