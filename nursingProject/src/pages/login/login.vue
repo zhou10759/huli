@@ -170,20 +170,20 @@
           </div>
           <!-- </van-form> -->
         </div>
-        <!-- 经销商 -->
+        <!-- 合伙人 -->
         <div class="form-teacher" v-show="actionIndex == 3">
           <van-form @submit="onDistributionSubmit">
             <van-field
               v-model="teacherList.userPhone"
               name="userPhone"
-              placeholder="请输入经销商ID"
+              placeholder="请输入合伙人ID"
               :rules="[{ pattern: phoneReg, message: '老师ID格式错误' }]"
             />
             <van-field
               v-model="teacherList.password"
               name="password"
               type="password"
-              placeholder="请输入经销商身份码"
+              placeholder="请输入合伙人身份码"
               :rules="[{ required: true, message: '请输入老师身份码' }]"
             />
             <div class="login-sub btn1">
@@ -217,7 +217,7 @@ export default {
   components: { Search },
   data() {
     return {
-      navBar: ["顾客", "商家", "老师", "经销商"],
+      navBar: ["顾客", "商家", "老师", "合伙人"],
       actionIndex: 0,
       customerList: {
         userName: "",
@@ -513,7 +513,7 @@ export default {
       });
     },
     onDistributionSubmit(values) {
-      // 经销商
+      // 合伙人
       let that = this;
       if (!this.teacherList.userPhone) {
         Toast.fail("手机号码有误！");
@@ -570,8 +570,8 @@ export default {
   justify-content: space-around;
 }
 .header-btn {
-  height: 80px;
-  width: 40%;
+  height: 140px;
+  width: 140px;
   margin-bottom: 40px;
   font-size: 32px;
 }

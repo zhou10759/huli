@@ -12,7 +12,7 @@
           >老师列表</van-button
         >
       </div>
-      <div class="header-name" >经销商ID: {{ userPhone }}</div>
+      <div class="header-name" >合伙人ID: {{ userPhone }}</div>
       <div class="distribution-quit">
         <img src="../../../static/quit.png" @click="quit()" alt />
       </div>

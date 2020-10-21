@@ -12,7 +12,7 @@
           >所有订单</van-button
         >
       </div>
-      <div class="add-btn">
+      <div class="add-btn" v-if="teacherType===0">
         <van-button
           plain
           hairline
@@ -137,6 +137,16 @@
             />
           </van-cell-group>
         </div>
+         <div class="form-items">
+          <div class="form-title">项 目 金 额</div>
+          <van-cell-group>
+            <van-field
+              type="number"
+              v-model="projectList.projectMoney"
+              placeholder="请输入项目金额"
+            />
+          </van-cell-group>
+        </div>
         <div class="form-items">
           <div class="form-title">项 目 次 数</div>
           <van-cell-group>
@@ -154,16 +164,6 @@
               type="digit"
               v-model="projectList.projectTime"
               placeholder="请输入项目时长"
-            />
-          </van-cell-group>
-        </div>
-        <div class="form-items">
-          <div class="form-title">项 目 金 额</div>
-          <van-cell-group>
-            <van-field
-              type="number"
-              v-model="projectList.projectMoney"
-              placeholder="请输入项目金额"
             />
           </van-cell-group>
         </div>
@@ -273,6 +273,7 @@ export default {
       },
       experience: false,
       isBtnStatus: null, //0为到店 1为离店
+      teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType
     };
   },
   watch: {

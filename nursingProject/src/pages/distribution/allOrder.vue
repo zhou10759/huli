@@ -1,12 +1,12 @@
 <template>
   <div class="allOrder">
     <div class="distribution-nav">
-      <div class="header-name">经销商ID: {{ userPhone }}</div>
+      <div class="header-name">合伙人ID: {{ userPhone }}</div>
       <div class="distribution-quit">
         <img src="../../../static/quit.png" @click="quit()" alt />
       </div>
     </div>
-    <div class="line"></div>
+    <div class="line" style="margin-top:40px;"></div>
     <div class="search-toggle">
       <van-radio-group v-model="searchType" direction="horizontal">
         <van-radio name="1">订单名称</van-radio>
