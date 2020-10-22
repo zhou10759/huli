@@ -153,6 +153,7 @@
             <van-field
               type="digit"
               v-model="projectList.projectNum"
+              :disabled="getPriceType&&teacherType===1"
               placeholder="请输入项目次数"
             />
           </van-cell-group>
@@ -163,6 +164,7 @@
             <van-field
               type="digit"
               v-model="projectList.projectTime"
+               :disabled="getPriceType&&teacherType===1"
               placeholder="请输入项目时长"
             />
           </van-cell-group>
@@ -273,7 +275,8 @@ export default {
       },
       experience: false,
       isBtnStatus: null, //0为到店 1为离店
-      teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType
+      teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType,
+      getPriceType: false,
     };
   },
   watch: {
@@ -290,9 +293,13 @@ export default {
             if (res.code === "000000") {
               this.projectList.projectNum = res.data.totalTimes;
               this.projectList.projectTime = res.data.everyTime;
+              this.getPriceType = true;
             } else if (res.code === "000001") {
               this.projectList.projectNum = "";
               this.projectList.projectTime = "";
+              this.getPriceType = false;
+            }else{
+              this.getPriceType = false;
             }
           });
         }

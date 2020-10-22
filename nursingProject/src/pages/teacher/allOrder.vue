@@ -1,21 +1,28 @@
 <template>
   <div class="allOrder">
     <div class="allOrder-header">
-      <div class="header-name">老师ID: {{userPhone}}</div>
+      <div class="header-name" style="color: #2c3e50">
+        老师ID: {{ userPhone }}
+      </div>
       <div class="header-quit">
         <van-button
           color="linear-gradient(to right, #6F6F6F , #414141)"
           round
           block
           @click="quit"
-        >退出登陆</van-button>
+          >退出登陆</van-button
+        >
       </div>
     </div>
     <div class="line"></div>
     <div class="allOrder-search">
       <div class="search-view">
         <img src="../../../static/search.png" alt />
-        <input type="text" placeholder="搜索项目名、订单类型、顾客姓名" v-model="searchName" />
+        <input
+          type="text"
+          placeholder="搜索项目名、订单类型、顾客姓名"
+          v-model="searchName"
+        />
       </div>
       <div class="search-btn">
         <van-button
@@ -23,18 +30,22 @@
           round
           block
           @click="getOrderAll()"
-        >搜索</van-button>
+          >搜索</van-button
+        >
       </div>
     </div>
     <div class="order-list">
-      <div class="order-items" v-for="(el,i) in orderList" :key="el.id">
+      <div class="order-items" v-for="(el, i) in orderList" :key="el.id">
         <div class="items-content">
-          <div>{{el.orderName}} <van-tag type="danger" v-if="el.parentId!=0">送</van-tag></div>
-          <div>{{el.createTime}}</div>
+          <div>
+            {{ el.orderName }}
+            <van-tag type="danger" v-if="el.parentId != 0">送</van-tag>
+          </div>
+          <div>{{ el.createTime }}</div>
         </div>
         <div class="items-content">
-          <div>套餐金额：{{el.price}}元</div>
-          <div>剩余次数：{{el.times}}/{{el.totalTimes}}</div>
+          <div>套餐金额：{{ el.price }}元</div>
+          <div>剩余次数：{{ el.times }}/{{ el.totalTimes }}</div>
         </div>
         <div class="items-content">
           <div>
@@ -42,15 +53,22 @@
               color="linear-gradient(to right, #6F6F6F , #414141)"
               round
               block
-            >{{el.orderType==0?"固定模式":"自定义模式"}}</van-button>
+              >{{ el.orderType == 0 ? "固定模式" : "自定义模式" }}</van-button
+            >
           </div>
-          <div>{{el.userName}}</div>
+          <div>{{ el.userName }}</div>
         </div>
         <div class="items-remarks">
-          <div :class="el.status==0?'yichu':''">备注：{{el.remarks||"无备注"}}</div>
+          <div :class="el.status == 0 ? 'yichu' : ''">
+            备注：{{ el.remarks || "无备注" }}
+          </div>
           <img
             @click="remarksMore(i)"
-            :src="el.status===0?'../../../static/shouqi.png':'../../../static/zhankai.png'"
+            :src="
+              el.status === 0
+                ? '../../../static/shouqi.png'
+                : '../../../static/zhankai.png'
+            "
             alt
           />
         </div>
@@ -73,7 +91,7 @@ export default {
           times: 6,
           totalTimes: 10,
           projectType: "自定义项目",
-          memberName: "张三"
+          memberName: "张三",
         },
         {
           orderName: "全身护理-面部-去黑头",
@@ -82,7 +100,7 @@ export default {
           times: 6,
           totalTimes: 10,
           projectType: "自定义项目",
-          memberName: "张三"
+          memberName: "张三",
         },
         {
           orderName: "全身护理-面部-去黑头",
@@ -91,7 +109,7 @@ export default {
           times: 6,
           totalTimes: 10,
           projectType: "自定义项目",
-          memberName: "张三"
+          memberName: "张三",
         },
         {
           orderName: "全身护理-面部-去黑头",
@@ -100,12 +118,12 @@ export default {
           times: 6,
           totalTimes: 10,
           projectType: "自定义项目",
-          memberName: "张三"
-        }
+          memberName: "张三",
+        },
       ],
       searchName: "",
       loading: false,
-      finished: false
+      finished: false,
     };
   },
   created() {
@@ -128,12 +146,17 @@ export default {
       const toast = Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true,
-        message: "加载中...."
+        message: "加载中....",
       });
-      orderListByBusiness({
+      let query = {
         businessId: JSON.parse(localStorage.getItem("userInfo")).businessId,
-        searchName: this.searchName || ""
-      }).then(res => {
+        searchName: this.searchName || "",
+      };
+      if (JSON.parse(localStorage.getItem("userInfo")).teacherType === 1) {
+        query.teacherType = JSON.parse(localStorage.getItem("userInfo")).teacherType;
+        query.provincialId = JSON.parse(localStorage.getItem("userInfo")).provincialId;
+      }
+      orderListByBusiness(query).then((res) => {
         Toast.clear();
         if (res.code == "000000" && res.data.length > 0) {
           res.data.map((el, i) => {
@@ -142,12 +165,12 @@ export default {
           this.orderList = res.data;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
-.allOrder .van-tag{
+.allOrder .van-tag {
   padding: 6px 14px;
   font-size: 24px;
   border-radius: 30px;
