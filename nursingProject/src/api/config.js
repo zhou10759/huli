@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 const Axios = axios.create({
-    baseURL: process.env.NODE_ENV === 'development' ? '/message' : 'http://massage.1mmkj.com',
+    baseURL: process.env.NODE_ENV === 'development' ? '/message' : 'http://member.1mmkj.com',
     timeout: 20000,
     responseType: 'json',
     withCredentials: true, // 是否允许带cookie这些

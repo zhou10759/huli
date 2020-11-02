@@ -442,8 +442,8 @@ export default {
       //      function () {
       //       window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2902d0ead8bf9e42&redirect_uri=${encodeURIComponent(
       //         window.location.href == "http://localhost:8080/#/"
-      //           ? "http://massage.1mmkj.com/massage/#/"
-      //           : "http://massage.1mmkj.com/massage/#/"
+      //           ? "http://member.1mmkj.com/massage/#/"
+      //           : "http://member.1mmkj.com/massage/#/"
       //       )}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`;
       //     },
       //     1000

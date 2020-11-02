@@ -153,7 +153,7 @@
             <van-field
               type="digit"
               v-model="projectList.projectNum"
-              :disabled="getPriceType&&teacherType===1"
+              :disabled="teacherType===1"
               placeholder="请输入项目次数"
             />
           </van-cell-group>
@@ -164,7 +164,7 @@
             <van-field
               type="digit"
               v-model="projectList.projectTime"
-               :disabled="getPriceType&&teacherType===1"
+               :disabled="teacherType===1"
               placeholder="请输入项目时长"
             />
           </van-cell-group>
@@ -428,6 +428,10 @@ export default {
         }
         if (!this.projectList.projectMoney) {
           Toast.fail("请输入项目金额");
+          return;
+        }
+        if(!this.getPriceType&&this.teacherType===1){
+           Toast.fail("项目价格不在价格区间");
           return;
         }
         query = {
