@@ -44,9 +44,9 @@
           round
           block
           @click="openEquipment"
-        >体验模式</van-button>
+        >系统刷新</van-button>
       </div>
-      <div class="experience-date">剩余体验时长：{{remainingTime||0}}分钟</div>
+      <!-- <div class="experience-date">剩余体验时长：{{remainingTime||0}}分钟</div> -->
     </div>
     <div class="line"></div>
     <div class="business-content">

@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/message': { //这里的key就是axios的baseURL
-        target: 'http://member.1mmkj.com', //访问域名
+        target: 'http://massage.1mmkj.com', //访问域名
         changeOrigin: true, //开启跨域
         pathRewrite: { // 路径重写，
           '^/message': '' // 替换target中的请求地址
