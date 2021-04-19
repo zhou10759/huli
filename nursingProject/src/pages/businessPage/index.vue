@@ -4,7 +4,7 @@
       <div class="header-left">
         <div class="header-left-name">
           <span>店家名称：</span>
-          {{userInfo.userName}}
+          {{ userInfo.userName }}
         </div>
         <div class="header-equipment">
           <span>设 备：</span>
@@ -34,7 +34,8 @@
           round
           block
           @click="quitLogin"
-        >退出登陆</van-button>
+          >退出登陆</van-button
+        >
       </div>
     </div>
     <div class="experience-content">
@@ -44,13 +45,23 @@
           round
           block
           @click="openEquipment"
-        >系统刷新</van-button>
+          >系统刷新</van-button
+        >
+      </div>
+      <div class="experience-btn">
+        <van-button
+          color="linear-gradient(to right, #6F6F6F , #414141)"
+          block
+          round
+          @click="$router.push('businessOrderList')"
+          >订单列表</van-button
+        >
       </div>
       <!-- <div class="experience-date">剩余体验时长：{{remainingTime||0}}分钟</div> -->
     </div>
     <div class="line"></div>
     <div class="business-content">
-      <div class="content-search">
+      <!-- <div class="content-search">
         <van-search v-model="searchVal" placeholder="请输入项目名称" @search="onSearch"></van-search>
         <div class="search-btn">
           <van-button
@@ -60,56 +71,79 @@
             @click="onSearch(searchVal)"
           >搜索</van-button>
         </div>
-      </div>
+      </div> -->
       <div class="content-list">
         <div class="list-sidebar">
           <div
             class="sidebar-items"
-            v-for="(el,i) in sidebarList"
-            @click="toogleSidebar(i,el)"
+            v-for="(el, i) in sidebarList"
+            @click="
+              $router.push({ path: 'subOrder', query: { id: el.projectId } })
+            "
             :key="i"
           >
-            <div
-              :class="(el.selected ? 'active-sidebar-items-name' : '') + '    sidebar-items-name'"
-            >{{el.projectName}}</div>
-            <img :src="el.projectImg||'./static/icon.png'" alt />
+            <div class="sidebar-items-name">
+              {{ el.projectName }}
+            </div>
+            <!-- <img :src="el.projectImg || './static/icon.png'" alt /> -->
           </div>
         </div>
-        <div class="list-classification">
-          <div class="second_level_title" v-show="list1.length>0">二级分类</div>
+        <!-- <div class="list-classification">
+          <div class="second_level_title" v-show="list1.length > 0">
+            二级分类
+          </div>
           <div class="second_level_content">
-            <div class="second_level_items" v-for="(el,i) in list1" :key="i">
+            <div class="second_level_items" v-for="(el, i) in list1" :key="i">
               <van-button
-                :color="el.selected ?'linear-gradient(to right, #EFEFEF , #D7D7D7)' :'linear-gradient(to right, #6F6F6F , #414141)'"
+                :color="
+                  el.selected
+                    ? 'linear-gradient(to right, #EFEFEF , #D7D7D7)'
+                    : 'linear-gradient(to right, #6F6F6F , #414141)'
+                "
                 round
                 block
-                @click="toggleSecondLevel(i,el,1)"
-              >{{el.projectName}}</van-button>
+                @click="toggleSecondLevel(i, el, 1)"
+                >{{ el.projectName }}</van-button
+              >
             </div>
           </div>
-          <div class="second_level_title" v-show="list2.length>0">三级分类</div>
+          <div class="second_level_title" v-show="list2.length > 0">
+            三级分类
+          </div>
           <div class="level_three_content">
-            <div class="level_three_items" v-for="(el,i) in list2" :key="i">
+            <div class="level_three_items" v-for="(el, i) in list2" :key="i">
               <van-button
-                :color="el.selected ?'linear-gradient(to right, #EFEFEF , #D7D7D7)' :'linear-gradient(to right, #6F6F6F , #414141)'"
+                :color="
+                  el.selected
+                    ? 'linear-gradient(to right, #EFEFEF , #D7D7D7)'
+                    : 'linear-gradient(to right, #6F6F6F , #414141)'
+                "
                 round
                 block
-                @click="toggleSecondLevel(i,el,2)"
-              >{{el.projectName}}</van-button>
+                @click="toggleSecondLevel(i, el, 2)"
+                >{{ el.projectName }}</van-button
+              >
             </div>
           </div>
-          <div class="second_level_title" v-show="list3.length>0">四级分类</div>
+          <div class="second_level_title" v-show="list3.length > 0">
+            四级分类
+          </div>
           <div class="level_three_content">
-            <div class="level_three_items" v-for="(el,i) in list3" :key="i">
+            <div class="level_three_items" v-for="(el, i) in list3" :key="i">
               <van-button
-                :color="el.selected ?'linear-gradient(to right, #EFEFEF , #D7D7D7)' :'linear-gradient(to right, #6F6F6F , #414141)'"
+                :color="
+                  el.selected
+                    ? 'linear-gradient(to right, #EFEFEF , #D7D7D7)'
+                    : 'linear-gradient(to right, #6F6F6F , #414141)'
+                "
                 round
                 block
-                @click="toggleSecondLevel(i,el,3)"
-              >{{el.projectName}}</van-button>
+                @click="toggleSecondLevel(i, el, 3)"
+                >{{ el.projectName }}</van-button
+              >
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -120,7 +154,7 @@ import {
   equipmentList,
   selectProjectList,
   businessSendOrder,
-  moneyUnsettled
+  moneyUnsettled,
 } from "../../api/index/index";
 import { Toast, Dialog } from "vant";
 export default {
@@ -151,23 +185,24 @@ export default {
     // console.log(new Date().getDate());
   },
   methods: {
-    getMoneyUnsettled(){
+    getMoneyUnsettled() {
       moneyUnsettled({
-        businessId: this.userInfo.businessId
-      }).then(res=>{
-        if(res.code=="000000"){
+        businessId: this.userInfo.businessId,
+      }).then((res) => {
+        if (res.code == "000000") {
           this.moenyTotal = res.data;
-          this.getDate()
+          this.getDate();
         }
-      })
+      });
     },
     getDate() {
       let num = new Date().getDate() - 26;
-      if (num >= 0 && num < 3&&this.moenyTotal.achievement==0) {
+      if (num >= 0 && num < 3 && this.moenyTotal.achievement == 0) {
         Dialog.confirm({
           title: "提示",
-          message:
-            `美力时间不够了，请尽快给我补充些美力吧。未结算总业绩额：${this.moenyTotal.money}元  锁机倒计时：${3-num}天`
+          message: `美力时间不够了，请尽快给我补充些美力吧。未结算总业绩额：${
+            this.moenyTotal.money
+          }元  锁机倒计时：${3 - num}天`,
         })
           .then(() => {})
           .catch(() => {
@@ -181,8 +216,8 @@ export default {
         return;
       }
       businessSendOrder({
-        equipmentId: this.userInfo.equipmentId
-      }).then(res => {
+        equipmentId: this.userInfo.equipmentId,
+      }).then((res) => {
         if (res.code === "000000") {
           Toast.success("开启成功！");
         } else {
@@ -193,12 +228,12 @@ export default {
     getEquipmentList() {
       equipmentList({
         businessId: this.userInfo.businessId,
-        type: 1
-      }).then(res => {
+        type: 1,
+      }).then((res) => {
         if (res.code == "000000") {
-          this.equipment = res.data.map(el => el.equipmentId);
+          this.equipment = res.data.map((el) => el.equipmentId);
           this.equipmentData = res.data;
-          res.data.map(el => {
+          res.data.map((el) => {
             if (el.equipmentId == this.userInfo.equipmentId) {
               this.remainingTime = el.surplusTime;
             }
@@ -211,15 +246,15 @@ export default {
       const toast = Toast.loading({
         duration: 0, // 持续展示 toast
         forbidClick: true,
-        message: "加载中....."
+        message: "加载中.....",
       });
       return new Promise((resolve, reject) => {
-        projectList({ parentId }).then(res => {
+        projectList({ parentId }).then((res) => {
           Toast.clear();
           if (res.code === "000000") {
             if (res.data.length > 0) {
               if (parentId == 0) {
-                res.data.map(el => (el.selected = false));
+                res.data.map((el) => (el.selected = false));
                 that.sidebarList = res.data;
                 // debugger
               }
@@ -227,7 +262,7 @@ export default {
             } else {
               this.$router.push({
                 path: "projectDetails",
-                query: { projectId: parentId }
+                query: { projectId: parentId },
               });
             }
           }
@@ -236,7 +271,7 @@ export default {
     },
     equipmentToggle(val) {
       this.$set(this.userInfo, "equipmentId", val);
-      this.equipmentData.map(el => {
+      this.equipmentData.map((el) => {
         if (el.equipmentId == val) {
           this.remainingTime = el.surplusTime;
         }
@@ -254,13 +289,13 @@ export default {
       // console.log(val)
       // return;
       selectProjectList({
-        projectName: val
-      }).then(res => {
+        projectName: val,
+      }).then((res) => {
         if (res.code == "000000") {
           if (res.data.length > 0) {
             this.$router.push({
               path: "projectDetails",
-              query: { projectId: res.data[0].projectId }
+              query: { projectId: res.data[0].projectId },
             });
           } else {
             Toast.fail("暂无搜索内容！");
@@ -271,7 +306,7 @@ export default {
       });
     },
     async toogleSidebar(i, el) {
-      this.sidebarList.map(el => (el.selected = false));
+      this.sidebarList.map((el) => (el.selected = false));
       el.selected = true;
       console.log(el.parentId);
       this.list1 = await this.getProjectList(el.projectId);
@@ -282,28 +317,28 @@ export default {
     },
     async toggleSecondLevel(i, el, type) {
       if (type == 1) {
-        this.list1.map(el => (el.selected = false));
+        this.list1.map((el) => (el.selected = false));
         el.selected = true;
         this.list2 = await this.getProjectList(el.projectId);
         this.list3 = [];
       } else if (type == 2) {
-        this.list2.map(el => (el.selected = false));
+        this.list2.map((el) => (el.selected = false));
         el.selected = true;
         this.list3 = await this.getProjectList(el.projectId);
       } else if (type == 3) {
-        this.list3.map(el => (el.selected = false));
+        this.list3.map((el) => (el.selected = false));
         el.selected = true;
         await this.getProjectList(el.projectId);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scope>
 .content-search /deep/ .van-icon {
   font-size: 48px;
 }
-.business .header-equipment /deep/  .van-icon {
+.business .header-equipment /deep/ .van-icon {
   font-size: 24px;
   line-height: 40px;
 }
@@ -347,7 +382,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.business .header-equipment /deep/  .van-cell {
+.business .header-equipment /deep/ .van-cell {
   line-height: 60px;
 }
 /* .content-search /deep/  .van-cell {
@@ -384,14 +419,23 @@ export default {
   width: 100px;
 }
 .content-list {
-  display: flex;
+  /* display: flex; */
 }
 .list-sidebar {
-  width: 197px;
-  box-shadow: 0px 3px 10px 0px rgba(200, 200, 200, 0.5);
-  padding: 30px 0;
+  /* width: 197px;
+  box-shadow: 0px 3px 10px 0px rgba(200, 200, 200, 0.5); 
+  padding: 30px; */
+  text-align: left;
+  padding: 30px;
 }
 .sidebar-items {
+  display: inline-block;
+  height: 100px;
+  width: 42%;
+  box-shadow: 0px 3px 10px 0px rgba(200, 200, 200, 0.5);
+  margin: 20px;
+  text-align: center;
+  line-height: 100px;
 }
 .sidebar-items .sidebar-items-name {
   font-size: 28px;

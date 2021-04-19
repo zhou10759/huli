@@ -11,6 +11,8 @@ const AllOrder = r => require.ensure([], () => r(require('@/pages/teacher/allOrd
 const Distribution = r => require.ensure([], () => r(require('@/pages/distribution/index')), 'distribution');
 const TeacherList = r => require.ensure([], () => r(require('@/pages/distribution/teacherList')), 'teacherList');
 const TeacherOrder = r => require.ensure([], () => r(require('@/pages/distribution/allOrder')), 'teacherOrder');
+const SubOrder = r => require.ensure([], () => r(require('@/pages/businessPage/subOrder')), 'subOrder');
+const BusinessOrderList = r => require.ensure([], () => r(require('@/pages/businessPage/businessOrderList')), 'businessOrderList');
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -63,6 +65,16 @@ export default new Router({
       path: '/teacherOrder',
       name: 'teacherOrder',
       component: TeacherOrder
+    },
+    {
+      path: '/subOrder',
+      name: 'subOrder',
+      component: SubOrder
+    },
+    {
+      path: '/businessOrderList',
+      name: 'businessOrderList',
+      component: BusinessOrderList
     }
   ]
 })
