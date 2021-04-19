@@ -1,102 +1,101 @@
 <template>
   <div class="business-order">
     <div class="content-search">
-      <van-search
-        v-model="searchVal"
-        placeholder="请输入项目名称"
-        @search="onSearch"
-      ></van-search>
+      <van-search v-model="searchVal" placeholder="请输入项目名称"></van-search>
       <div class="search-btn">
         <van-button
           color="linear-gradient(to right, #6F6F6F , #414141)"
           round
           block
-          @click="onSearch(searchVal)"
+          @click="getList('search')"
           >搜索</van-button
         >
       </div>
     </div>
     <div class="order-list">
-      <div class="order-items" v-for="el in orderList" :key="el.id">
-        <div class="order-items-projectName">{{ el.projectName }}</div>
-        <div class="order-items-line">
-          <span class="order-items-line-money"
-            >套餐金额：{{ el.projectMoney }}元</span
-          >
-          <span class="order-items-line-name">{{ el.name }}</span>
+      <van-list
+        style="height: 500px; overflow: scroll"
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :immediate-check="false"
+        offset="50"
+      >
+        <div class="order-items" v-for="el in orderList" :key="el.id">
+          <div class="order-items-projectName">{{ el.orderName }}</div>
+          <div class="order-items-line">
+            <span class="order-items-line-money"
+              >套餐金额：{{ el.price }}元</span
+            >
+            <span class="order-items-line-name">{{ el.userName }}</span>
+          </div>
+          <div class="order-items-line">
+            <span class="order-items-line-num"
+              >次数：{{ el.times }}/{{ el.totalTimes }}</span
+            >
+            <span class="order-items-line-phone"
+              >手机尾号：{{ el.userPhone }}</span
+            >
+          </div>
+          <div class="order-items-line">
+            <span class="order-items-line-give">{{
+              el.give ? "赠送" : ""
+            }}</span>
+            <span class="order-items-line-phone">{{ el.createTime }}</span>
+          </div>
+          <div class="order-items-remarks">备注：{{ el.remarks || "" }}</div>
         </div>
-        <div class="order-items-line">
-          <span class="order-items-line-num"
-            >次数：{{ el.projectNum }}/{{ el.projectTotalNum }}</span
-          >
-          <span class="order-items-line-phone"
-            >手机尾号：{{ el.phone ? el.phone.substr(-4) : "" }}</span
-          >
-        </div>
-        <div class="order-items-line">
-          <span class="order-items-line-give">{{ el.give ? "赠送" : "" }}</span>
-          <span class="order-items-line-phone">{{ el.createTime }}</span>
-        </div>
-        <div class="order-items-remarks">备注：{{ el.remarks }}</div>
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
 
 <script>
-import { selectProjectList } from "../../api/index/index";
+import { findOrder } from "../../api/index/index";
 export default {
   data() {
     return {
       searchVal: "",
-      orderList: [
-        {
-          id: 1,
-          projectName: "浅层护理",
-          projectMoney: 4000,
-          projectNum: 4,
-          projectTotalNum: 10,
-          name: "猪石头",
-          phone: "18268186295",
-          createTime: "2014/4/14",
-          give: true,
-          remarks: "这个项目是一个赠送的项目",
-        },
-          {
-          id: 2,
-          projectName: "浅层护理",
-          projectMoney: 4000,
-          projectNum: 4,
-          projectTotalNum: 10,
-          name: "猪石头",
-          phone: "18268186295",
-          createTime: "2014/4/14",
-          give: false,
-          remarks: "这个项目是一个赠送的项目",
-        },
-      ],
+      orderList: [],
+      finished: false,
+      loading: false,
+      page: 1,
+      total: 0,
     };
   },
+  created() {
+    this.getList();
+  },
   methods: {
-    onSearch(val) {
-      // console.log(val)
-      // return;
-      selectProjectList({
-        projectName: val,
+    getList(val) {
+      this.loading = true;
+      let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      findOrder({
+        page: val === "search" ? 1 : this.page,
+        pageSize: 6,
+        userId: userInfo.businessId,
+        orderName: this.searchVal || "",
       }).then((res) => {
-        if (res.code == "000000") {
-          if (res.data.length > 0) {
-            this.$router.push({
-              path: "projectDetails",
-              query: { projectId: res.data[0].projectId },
-            });
-          } else {
-            Toast.fail("暂无搜索内容！");
-          }
+        if (val === "search") {
+          this.orderList = res.data;
+          this.total = res.count;
+          this.loading = false;
+          this.finished = false;
         } else {
-          Toast.fail(res.msg);
+          this.orderList = res.data.concat(...this.orderList);
+          this.total = res.count;
+          // 加载状态结束
+          this.loading = false;
+          if (this.orderList.length >= this.total) {
+            this.finished = true;
+          }
         }
       });
+    },
+    onLoad() {
+      this.page++;
+      this.getList();
     },
   },
 };
@@ -105,6 +104,13 @@ export default {
 <style>
 .content-search /deep/ .van-icon {
   font-size: 48px;
+}
+.business .header-equipment /deep/ .van-icon {
+  font-size: 24px;
+  line-height: 40px;
+}
+.business .header-equipment /deep/ .van-cell {
+  line-height: 60px;
 }
 .content-search {
   padding: 30px;
@@ -138,11 +144,11 @@ export default {
   justify-content: space-between;
   margin-bottom: 15px;
 }
-.order-items-line-give{
-    color: red;
+.order-items-line-give {
+  color: red;
 }
-.order-items-projectName{
-    margin-bottom: 15px;
-    font-weight: bold;
+.order-items-projectName {
+  margin-bottom: 15px;
+  font-weight: bold;
 }
 </style>

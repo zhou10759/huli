@@ -78,7 +78,7 @@
             class="sidebar-items"
             v-for="(el, i) in sidebarList"
             @click="
-              $router.push({ path: 'subOrder', query: { id: el.projectId } })
+              $router.push({ path: 'subOrder', query: { projectName: el.projectName } })
             "
             :key="i"
           >

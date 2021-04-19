@@ -454,7 +454,7 @@ export default {
       }
       if (this.projectList.give) {
         if (!this.projectList.giveOrderName) {
-          Toast.fail("请输入项目次数");
+          Toast.fail("请输入项目名称");
           return;
         }
         if (!this.projectList.giveTotalTimes) {
