@@ -108,4 +108,14 @@ export default {
   min-width: 200px;
   min-height: 80px;
 }
+.content-search /deep/ .van-icon {
+  font-size: 48px;
+}
+.business .header-equipment /deep/ .van-icon {
+  font-size: 24px;
+  line-height: 40px;
+}
+.business .header-equipment /deep/ .van-cell {
+  line-height: 60px;
+}
 </style>

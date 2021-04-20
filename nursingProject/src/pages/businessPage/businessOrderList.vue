@@ -102,16 +102,6 @@ export default {
 </script>
 
 <style>
-.content-search /deep/ .van-icon {
-  font-size: 48px;
-}
-.business .header-equipment /deep/ .van-icon {
-  font-size: 24px;
-  line-height: 40px;
-}
-.business .header-equipment /deep/ .van-cell {
-  line-height: 60px;
-}
 .content-search {
   padding: 30px;
   height: 126px;
