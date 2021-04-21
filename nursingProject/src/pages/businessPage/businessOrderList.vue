@@ -1,7 +1,14 @@
 <template>
   <div class="business-order">
     <div class="content-search">
-      <van-search v-model="searchVal" placeholder="请输入项目名称"></van-search>
+      <van-cell-group>
+        <van-field
+          type="text"
+          v-model="searchVal"
+          placeholder="请输入项目名称"
+        />
+      </van-cell-group>
+      <!-- <van-search v-model="searchVal" placeholder="请输入项目名称"></van-search> -->
       <div class="search-btn">
         <van-button
           color="linear-gradient(to right, #6F6F6F , #414141)"
@@ -44,14 +51,14 @@
       </div>
       <!-- </van-list> -->
     </div>
-    <div style="padding-bottom: 40px;">
-    <van-pagination
-      v-model="page"
-      :total-items="total"
-      :items-per-page="5"
-      @change="changeList"
-       force-ellipses
-    />
+    <div style="padding-bottom: 40px">
+      <van-pagination
+        v-model="page"
+        :total-items="total"
+        :items-per-page="5"
+        @change="changeList"
+        force-ellipses
+      />
     </div>
   </div>
 </template>
