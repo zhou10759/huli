@@ -1,6 +1,6 @@
 <template>
   <div class="subOrder">
-    <div class="order-name">{{OrderName}}</div>
+    <div class="order-name">{{ OrderName }}</div>
     <div class="form">
       <div class="form-items">
         <div class="form-title">项 目 金 额</div>
@@ -56,7 +56,13 @@
           />
         </van-cell-group>
       </div>
-      <div class="form-bg">
+      <div class="form-items">
+        <div class="form-title">项 目 优 惠</div>
+        <van-cell-group>
+          <van-checkbox v-model="projectList.give">送</van-checkbox>
+        </van-cell-group>
+      </div>
+      <div class="form-bg" v-show="projectList.give">
         <div style="margin-bottom: 15px">
           赠送：（须填写项目时长、次数，否则不生效）
         </div>
@@ -82,7 +88,7 @@
           </van-cell-group>
         </div>
       </div>
-      <div class="form-items">
+      <div class="form-textarea">
         <div class="form-title">备 注</div>
         <van-cell-group>
           <van-field
@@ -160,14 +166,12 @@ export default {
         equipmentId: userInfo.equipmentId,
         remarks: this.projectList.remarks,
       };
-      if (this.projectList.giveTotalTimes && this.projectList.giveEveryTime) {
-        query.give = 1;
+      query.give = this.projectList.give ? 1 : 0;
+      if (this.projectList.give) {
         (query.giveTotalTimes = this.projectList.giveTotalTimes),
           (query.giveEveryTime = this.projectList.giveEveryTime),
           (query.giveProjectTime =
             this.projectList.giveTotalTimes * this.projectList.giveEveryTime);
-      } else {
-        query.give = 0;
       }
       submitOrder(query).then((res) => {
         if (res.code == "000000") {
@@ -183,6 +187,19 @@ export default {
 </script>
 
 <style socpe>
+.content-search .van-icon {
+  font-size: 48px;
+}
+.subOrder .van-icon {
+  font-size: 24px;
+  line-height: 40px;
+}
+.subOrder .van-cell {
+  line-height: 60px;
+}
+.subOrder .van-checkbox__icon {
+  font-size: 32px;
+}
 .subOrder {
   text-align: left;
   padding: 30px;
@@ -269,7 +286,7 @@ export default {
   opacity: 0;
   content: " ";
 }
-.order-name{
+.order-name {
   font-size: 32px;
   font-weight: bold;
   text-align: center;

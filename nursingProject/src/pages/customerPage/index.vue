@@ -79,7 +79,7 @@
           round
           block
           @click="operationEquipment(el,1)"
-        >我要操作</van-button>
+        >我要美力</van-button>
       </div>
     </div>
   </div>
@@ -156,12 +156,12 @@ export default {
       });
       console.log("this.orderList", this.orderList, selectedNum);
       if ((status == 1 && selectedNum == 0) || this.activeNav == 0) {
-        Toast.fail("请选择要操作的套餐！");
+        Toast.fail("请选择要美力的套餐！");
         return;
       }
       Dialog.confirm({
         title: "提示",
-        message: "是否开始操作"
+        message: "是否开始美力"
       })
         .then(() => {
           // on confirm
@@ -196,7 +196,7 @@ export default {
           }
           sendOrder(data).then(res => {
             if (res.code == "000000") {
-              Toast.success("操作开始！");
+              Toast.success("美力开始！");
               that.getUserOrder();
             } else if (res.code == "000001") {
               Toast.fail("当前设备正在使用，请等待！");

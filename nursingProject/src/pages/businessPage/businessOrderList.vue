@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="order-list">
-      <van-list
+      <!-- <van-list
         style="height: 500px; overflow: scroll"
         v-model="loading"
         :finished="finished"
@@ -21,32 +21,37 @@
         @load="onLoad"
         :immediate-check="false"
         offset="50"
-      >
-        <div class="order-items" v-for="el in orderList" :key="el.id">
-          <div class="order-items-projectName">{{ el.orderName }}</div>
-          <div class="order-items-line">
-            <span class="order-items-line-money"
-              >套餐金额：{{ el.price }}元</span
-            >
-            <span class="order-items-line-name">{{ el.userName }}</span>
-          </div>
-          <div class="order-items-line">
-            <span class="order-items-line-num"
-              >次数：{{ el.times }}/{{ el.totalTimes }}</span
-            >
-            <span class="order-items-line-phone"
-              >手机尾号：{{ el.userPhone }}</span
-            >
-          </div>
-          <div class="order-items-line">
-            <span class="order-items-line-give">{{
-              el.give ? "赠送" : ""
-            }}</span>
-            <span class="order-items-line-phone">{{ el.createTime }}</span>
-          </div>
-          <div class="order-items-remarks">备注：{{ el.remarks || "" }}</div>
+      > -->
+      <div class="order-items" v-for="el in orderList" :key="el.id">
+        <div class="order-items-projectName">{{ el.orderName }}</div>
+        <div class="order-items-line">
+          <span class="order-items-line-money">套餐金额：{{ el.price }}元</span>
+          <span class="order-items-line-name">{{ el.userName }}</span>
         </div>
-      </van-list>
+        <div class="order-items-line">
+          <span class="order-items-line-num"
+            >次数：{{ el.times }}/{{ el.totalTimes }}</span
+          >
+          <span class="order-items-line-phone"
+            >手机尾号：{{ el.userPhone }}</span
+          >
+        </div>
+        <div class="order-items-line">
+          <span class="order-items-line-give">{{ el.give ? "赠送" : "" }}</span>
+          <span class="order-items-line-phone">{{ el.createTime }}</span>
+        </div>
+        <div class="order-items-remarks">备注：{{ el.remarks || "" }}</div>
+      </div>
+      <!-- </van-list> -->
+    </div>
+    <div style="padding-bottom: 40px;">
+    <van-pagination
+      v-model="page"
+      :total-items="total"
+      :items-per-page="5"
+      @change="changeList"
+       force-ellipses
+    />
     </div>
   </div>
 </template>
@@ -68,12 +73,16 @@ export default {
     this.getList();
   },
   methods: {
+    changeList(page) {
+      this.page = page;
+      this.getList();
+    },
     getList(val) {
       this.loading = true;
       let userInfo = JSON.parse(localStorage.getItem("userInfo"));
       findOrder({
         page: val === "search" ? 1 : this.page,
-        pageSize: 6,
+        pageSize: 4,
         userId: userInfo.businessId,
         orderName: this.searchVal || "",
       }).then((res) => {
@@ -83,7 +92,7 @@ export default {
           this.loading = false;
           this.finished = false;
         } else {
-          this.orderList = res.data.concat(...this.orderList);
+          this.orderList = res.data;
           this.total = res.count;
           // 加载状态结束
           this.loading = false;
@@ -93,10 +102,10 @@ export default {
         }
       });
     },
-    onLoad() {
-      this.page++;
-      this.getList();
-    },
+    // onLoad() {
+    //   this.page++;
+    //   this.getList();
+    // },
   },
 };
 </script>
