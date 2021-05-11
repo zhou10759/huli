@@ -77,18 +77,25 @@
           <div
             class="sidebar-items"
             v-for="(el, i) in sidebarList"
-            @click="
-              $router.push({ path: 'subOrder', query: { projectName: el.projectName } })
-            "
+            @click="toogleSidebar(i, el)"
             :key="i"
           >
-            <div class="sidebar-items-name">
+            <div
+              :class="
+                (el.selected ? 'active-sidebar-items-name' : '') +
+                '    sidebar-items-name'
+              "
+            >
               {{ el.projectName }}
             </div>
+            <img :src="el.projectImg || './static/icon.png'" alt />
+            <!-- <div class="sidebar-items-name">
+              {{ el.projectName }}
+            </div> -->
             <!-- <img :src="el.projectImg || './static/icon.png'" alt /> -->
           </div>
         </div>
-        <!-- <div class="list-classification">
+        <div class="list-classification">
           <div class="second_level_title" v-show="list1.length > 0">
             二级分类
           </div>
@@ -107,7 +114,7 @@
               >
             </div>
           </div>
-          <div class="second_level_title" v-show="list2.length > 0">
+          <!-- <div class="second_level_title" v-show="list2.length > 0">
             三级分类
           </div>
           <div class="level_three_content">
@@ -142,8 +149,8 @@
                 >{{ el.projectName }}</van-button
               >
             </div>
-          </div>
-        </div> -->
+          </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -320,6 +327,7 @@ export default {
         this.list1.map((el) => (el.selected = false));
         el.selected = true;
         this.list2 = await this.getProjectList(el.projectId);
+        this.$router.push({ path: "subOrder", query: { projectName: el.projectName } });
         this.list3 = [];
       } else if (type == 2) {
         this.list2.map((el) => (el.selected = false));
@@ -419,16 +427,17 @@ export default {
   width: 100px;
 }
 .content-list {
-  /* display: flex; */
+  display: flex;
 }
 .list-sidebar {
-  /* width: 197px;
-  box-shadow: 0px 3px 10px 0px rgba(200, 200, 200, 0.5); 
+  width: 197px;
+  box-shadow: 0px 3px 10px 0px rgba(200, 200, 200, 0.5);
+  padding: 30px 0;
+  /* padding: 30px; */
+  /* text-align: left;
   padding: 30px; */
-  text-align: left;
-  padding: 30px;
 }
-.sidebar-items {
+/* .sidebar-items {
   display: inline-block;
   height: 100px;
   width: 42%;
@@ -436,7 +445,7 @@ export default {
   margin: 20px;
   text-align: center;
   line-height: 100px;
-}
+} */
 .sidebar-items .sidebar-items-name {
   font-size: 28px;
   font-family: PingFangSC-Medium, PingFang SC;

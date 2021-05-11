@@ -1,11 +1,11 @@
 <template>
   <div class="business-order">
     <div class="content-search">
-      <van-cell-group>
+      <van-cell-group style="flex:1;margin-right:20px;">
         <van-field
           type="text"
           v-model="searchVal"
-          placeholder="请输入项目名称"
+          placeholder="请输入用戶名、手机尾号、项目名称搜索"
         />
       </van-cell-group>
       <!-- <van-search v-model="searchVal" placeholder="请输入项目名称"></van-search> -->
@@ -125,6 +125,7 @@ export default {
   display: flex;
   justify-content: space-between;
   background-color: #ddd;
+  display: flex;
 }
 .content-search .van-search {
   padding: 0;
