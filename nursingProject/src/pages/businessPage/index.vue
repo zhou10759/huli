@@ -248,7 +248,7 @@ export default {
         }
       });
     },
-    getProjectList(parentId = 0) {
+    getProjectList(parentId = 0,projectName) {
       let that = this;
       const toast = Toast.loading({
         duration: 0, // 持续展示 toast
@@ -267,10 +267,11 @@ export default {
               }
               resolve(res.data);
             } else {
-              this.$router.push({
-                path: "projectDetails",
-                query: { projectId: parentId },
-              });
+              this.$router.push({ path: "subOrder", query: { projectName } });
+              // this.$router.push({
+              //   path: "projectDetails",
+              //   query: { projectId: parentId },
+              // });
             }
           }
         });
@@ -316,7 +317,7 @@ export default {
       this.sidebarList.map((el) => (el.selected = false));
       el.selected = true;
       console.log(el.parentId);
-      this.list1 = await this.getProjectList(el.projectId);
+      this.list1 = await this.getProjectList(el.projectId,el.projectName);
       this.list2 = [];
       this.list3 = [];
       // this.sidebarActive = i;
@@ -326,8 +327,9 @@ export default {
       if (type == 1) {
         this.list1.map((el) => (el.selected = false));
         el.selected = true;
-        this.list2 = await this.getProjectList(el.projectId);
-        this.$router.push({ path: "subOrder", query: { projectName: el.projectName } });
+        this.list2 = await this.getProjectList(el.projectId,el.projectName);
+        // return;
+        // this.$router.push({ path: "subOrder", query: { projectName: el.projectName } });
         this.list3 = [];
       } else if (type == 2) {
         this.list2.map((el) => (el.selected = false));
