@@ -12,7 +12,7 @@
           >所有订单</van-button
         >
       </div>
-      <div class="add-btn" v-if="teacherType===0">
+      <div class="add-btn" v-if="teacherType === 0">
         <van-button
           plain
           hairline
@@ -54,7 +54,10 @@
       <!-- <div class="line"></div> -->
       <div class="add_equipment-form">
         <div class="form-items">
-          <div class="form-title">老师ID</div>
+          <div class="flex">
+            <div class="form-title">老师ID</div>
+            <span v-if="teacherType==1" class="available">可用时间：{{ availableDate }}分钟</span>
+          </div>
           <van-cell-group>
             <van-field
               v-model="teacherId"
@@ -104,7 +107,7 @@
       </div>
     </div>
     <div class="project-message">
-      <div class="form-items">
+      <div class="form-items" v-if="teacherType!=1">
         <div class="form-title">体 验 订 单</div>
         <van-cell-group>
           <van-checkbox v-model="experience">是否为体验订单</van-checkbox>
@@ -137,7 +140,7 @@
             />
           </van-cell-group>
         </div>
-         <div class="form-items">
+        <div class="form-items">
           <div class="form-title">项 目 金 额</div>
           <van-cell-group>
             <van-field
@@ -153,7 +156,7 @@
             <van-field
               type="digit"
               v-model="projectList.projectNum"
-              :disabled="teacherType===1"
+              :disabled="teacherType === 1"
               placeholder="请输入项目次数"
             />
           </van-cell-group>
@@ -164,7 +167,7 @@
             <van-field
               type="digit"
               v-model="projectList.projectTime"
-               :disabled="teacherType===1"
+              :disabled="teacherType === 1"
               placeholder="请输入项目时长"
             />
           </van-cell-group>
@@ -244,6 +247,7 @@ import {
   equipmentList,
   teacherToShop,
   rangeList,
+  getDistributorTime,
 } from "../../api/index/index";
 import { Toast } from "vant";
 export default {
@@ -277,6 +281,7 @@ export default {
       isBtnStatus: null, //0为到店 1为离店
       teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType,
       getPriceType: false,
+      availableDate: 0
     };
   },
   watch: {
@@ -298,7 +303,7 @@ export default {
               this.projectList.projectNum = "";
               this.projectList.projectTime = "";
               this.getPriceType = false;
-            }else{
+            } else {
               this.getPriceType = false;
             }
           });
@@ -313,8 +318,16 @@ export default {
     // console.log("this.teacherId",this.teacherId,this.business)
     // this.getbusinessList();
     this.openEquipmentList();
+    this.getDistributorTime();
   },
   methods: {
+    getDistributorTime() {
+      getDistributorTime({
+        id: JSON.parse(localStorage.getItem("userInfo")).userId,
+      }).then((res) => {
+        this.availableDate = res.data;
+      });
+    },
     quit() {
       localStorage.removeItem("userInfo");
       this.$router.replace("/");
@@ -430,8 +443,8 @@ export default {
           Toast.fail("请输入项目金额");
           return;
         }
-        if(!this.getPriceType&&this.teacherType===1){
-           Toast.fail("项目价格不在价格区间");
+        if (!this.getPriceType && this.teacherType === 1) {
+          Toast.fail("项目价格不在价格区间");
           return;
         }
         query = {
@@ -601,5 +614,14 @@ export default {
 .project-message {
   padding: 30px;
   background-color: #fff;
+}
+.available {
+  font-size: 0.366667rem;
+  color: red;
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 </style>

@@ -12,6 +12,11 @@
           >添加老师</van-button
         >
       </div>
+      <div class="available-date">
+        <span>可用时间：</span>
+        <span class="red">{{availableDate}}</span>
+        <span>分钟</span>
+      </div>
       <div class="distribution-quit">
         <img src="../../../static/quit.png" @click="quit()" alt />
       </div>
@@ -100,6 +105,7 @@ import {
   deleteBusiness,
   updateBusiness,
   findBusinessManage,
+  getDistributorTime
 } from "../../api/index/index";
 import { Toast, Dialog } from "vant";
 export default {
@@ -126,13 +132,22 @@ export default {
       finished: false,
       show: false,
       title: "",
+      availableDate: 0
     };
   },
   created() {
     this.userPhone = JSON.parse(localStorage.getItem("userInfo")).userPhone;
     this.getTeacherAll();
+    this.getDistributorTime()
   },
   methods: {
+    getDistributorTime(){
+      getDistributorTime({
+        id: JSON.parse(localStorage.getItem("userInfo")).userId
+      }).then(res=>{
+        this.availableDate = res.data
+      })
+    },
     quit() {
       localStorage.removeItem("userInfo");
       this.$router.replace("/");
@@ -390,5 +405,12 @@ export default {
 }
 .distribution .van-empty__description {
   font-size: 0.366667rem;
+}
+.available-date{
+  font-size: 0.366667rem;
+  color: white;
+}
+.red{
+  color: red;
 }
 </style>

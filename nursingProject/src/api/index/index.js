@@ -144,5 +144,20 @@ export function getOpenId(data) {
   return axios.post(url, data)
 }
 
+//获取时间
+export function getDistributorTime(data) {
+  const url = `/massage/distributorTime/getDistributorTime`
+  let headers = {
+    "Content-Type": "application/json"
+  }
+  return axios({
+    method: 'post',
+    url,
+    headers,
+    data
+  })
+}
+
+
 
 

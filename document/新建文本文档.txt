@@ -1,6 +1,6 @@
-第一个小程序地址  http://massage.1mmkj.com appid: wxe79618b5a057822c
+第一个小程序地址   http://massage.1mmkj.com appid: wxe79618b5a057822c
 
-第二个小程序域名 http://massage.1mmkj.com  appid: wx2902d0ead8bf9e42
+第二个小程序域名  http://member.1mmkj.com  appid: wx2902d0ead8bf9e42
 
 后台静态地址： http://39.100.237.171:8080/massage/admin/page/login
 
