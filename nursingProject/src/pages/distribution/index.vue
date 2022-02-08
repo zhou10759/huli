@@ -98,6 +98,7 @@ export default {
         Toast.clear();
         if (res.code == "0" && res.data.length > 0) {
           this.orderList = res.data;
+          this.total = res.count;
         }
       });
     },

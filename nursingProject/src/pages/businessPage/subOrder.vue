@@ -1,6 +1,84 @@
 <template>
   <div class="subOrder">
-    <div class="order-name">{{ OrderName }}</div>
+    <div class="add-nav" v-if="type">
+      <div class="add-order">
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="$router.push('allOrder')"
+          >所有订单</van-button
+        >
+      </div>
+      <!-- <div class="add-btn" v-if="teacherType == 0">
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="
+            showPicker2 = true;
+            isBtnStatus = 0;
+          "
+          >到店</van-button
+        >
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="
+            showPicker2 = true;
+            isBtnStatus = 1;
+          "
+          >离店</van-button
+        >
+        <van-popup v-model="showPicker2" position="bottom">
+          <van-picker
+            show-toolbar
+            :columns="equipment"
+            @confirm="equipmentToggle"
+            @cancel="showPicker2 = false"
+          />
+        </van-popup>
+      </div> -->
+      <div class="add-quit">
+        <img src="../../../static/quit.png" @click="quit()" alt />
+      </div>
+    </div>
+    <div class="projectDetails-swipe" v-if="list.rotationChart.length">
+      <van-swipe @change="onChange" :height="290" :show-indicators="false">
+        <van-swipe-item v-for="(el,i) in list.rotationChart" :key="i">
+          <img
+            :src="el"
+            v-if="el.split('.')[el.split('.').length-1]=='jpg'||el.split('.')[el.split('.').length-1]=='png'||el.split('.')[el.split('.').length-1]=='jpeg'"
+            alt
+            style="width:100%;height:100%;"
+            class="swiper-items"
+            @click="imagePreview(i)"
+          />
+          <video
+            :src="el"
+            :poster="el"
+            :ref="'video'+i"
+            preload="metadata"
+            autoplay
+            muted
+            loop
+            width="100%"
+            height="290"
+            v-if="el.split('.')[el.split('.').length-1]=='mp4'"
+          ></video>
+        </van-swipe-item>
+        <template #indicator></template>
+      </van-swipe>
+      <div class="custom-indicator">{{ current + 1 }}/{{list.rotationChart.length}}</div>
+    </div>
+    <div class="order-name">{{ list.projectName }}</div>
     <div class="form">
       <div class="form-items">
         <div class="form-title">项 目 金 额</div>
@@ -34,7 +112,6 @@
           <van-field
             type="digit"
             v-model="projectList.projectNum"
-            :disabled="teacherType === 1"
             placeholder="请输入项目次数"
           />
         </van-cell-group>
@@ -109,12 +186,14 @@
 </template>
 
 <script>
-import { submitOrder } from "../../api/index/index";
-import { Toast } from "vant";
+import { submitOrder,projectDetails } from "../../api/index/index";
+import { Toast,ImagePreview } from "vant";
 export default {
+  name: 'subOrder',
   data() {
     return {
       OrderName: this.$route.query.projectName,
+       type: this.$route.query.type,
       projectList: {
         name: "",
         phone: "",
@@ -128,9 +207,53 @@ export default {
         giveEveryTime: "",
         giveProjectTime: "",
       },
+      teacherType: '',
+      list: [],
+      current: 0,
     };
   },
+  created() {
+    document.title = "项目详情";
+    this.teacherType =  JSON.parse(localStorage.getItem("userInfo")).teacherType || ""
+    this.loading = false;
+    projectDetails({ projectId: this.$route.query.projectId }).then(res => {
+      this.loading = true;
+      if ((res.code === "000000")) {
+        res.data.rotationChart = res.data.rotationChart
+          ? res.data.rotationChart.split(",")
+          : [];
+        res.data.rotationChart.push(
+          ...(res.data.rotationVideo ? res.data.rotationVideo.split(",") : "")
+        );
+        console.log("res.data.rotationChart", res.data.rotationChart);
+        console.log(res.data);
+        this.list = res.data;
+      }
+    });
+  },
   methods: {
+    onChange(index) {
+      this.current = index;
+      // let key = 'video'+index;
+      // console.log( this.$refs[key])
+      // if (
+      //   this.list.rotationChart[index].split(".")[this.list.rotationChart[index].split(".").length - 1] == "mp4"
+      // ) {
+      //   // var video = document.getElementById("video"+index);
+      //   // console.log(video)
+      //   this.$refs[key][0].play();
+      // } else {
+      //   console.log("不是视频")
+      //   //  var video = document.getElementById("video");
+      //    this.$refs[key][0].pause();
+      // }
+    },
+    imagePreview(i) {
+      ImagePreview({
+        images: this.list.rotationChart,
+        startPosition: i
+      });
+    },
     subOrder() {
       if (!this.projectList.name) {
         Toast.fail("请输入用户姓名");
@@ -182,11 +305,20 @@ export default {
         }
       });
     },
+     quitLogin() {
+      //退出登录
+      localStorage.removeItem("userInfo");
+      this.$router.replace("/");
+    },
   },
 };
 </script>
 
 <style socpe>
+.swiper-items{
+  width: 100%;
+  height: auto;
+}
 .content-search .van-icon {
   font-size: 48px;
 }
@@ -293,5 +425,50 @@ export default {
   margin-bottom: 20px;
   background-color: #ddd;
   padding: 15px 0;
+}
+.add-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(111, 111, 111, 1) 0%,
+    rgba(65, 65, 65, 1) 100%
+  );
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  z-index: 9999;
+}
+.add-order {
+  width: 200px;
+  height: 100%;
+}
+.add-btn {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  height: 100%;
+}
+.add-btn .van-button--block {
+  width: 145px;
+}
+.add-nav .van-button--round {
+  border-radius: 20px;
+}
+.add-nav .van-button::before {
+  border-radius: 20px;
+}
+.add-nav .van-button::after {
+  border: 0;
+}
+.add-quit img {
+  width: 50px;
+  height: 40px;
+  /* border-radius: 50%; */
 }
 </style>

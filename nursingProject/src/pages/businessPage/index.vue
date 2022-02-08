@@ -1,12 +1,12 @@
 <template>
   <div class="business">
-    <div class="business-header">
+    <div class="business-header" v-if="!type">
       <div class="header-left">
         <div class="header-left-name">
           <span>店家名称：</span>
           {{ userInfo.userName }}
         </div>
-        <div class="header-equipment">
+        <div class="header-equipment" >
           <span>设 备：</span>
           <van-field
             readonly
@@ -38,7 +38,57 @@
         >
       </div>
     </div>
-    <div class="experience-content">
+     <div class="add-nav" v-if="type">
+      <div class="add-order">
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="$router.push('allOrder')"
+          >所有订单</van-button
+        >
+      </div>
+      <!-- <div class="add-btn" v-if="teacherType == 0">
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="
+            showPicker2 = true;
+            isBtnStatus = 0;
+          "
+          >到店</van-button
+        >
+        <van-button
+          plain
+          hairline
+          type="primary"
+          round
+          block
+          @click="
+            showPicker2 = true;
+            isBtnStatus = 1;
+          "
+          >离店</van-button
+        >
+        <van-popup v-model="showPicker2" position="bottom">
+          <van-picker
+            show-toolbar
+            :columns="equipment"
+            @confirm="equipmentToggle"
+            @cancel="showPicker2 = false"
+          />
+        </van-popup>
+      </div> -->
+      <div class="add-quit">
+        <img src="../../../static/quit.png" @click="quitLogin()" alt />
+      </div>
+    </div>
+    <div class="experience-content" v-if="!type">
       <div class="experience-btn">
         <van-button
           color="linear-gradient(to right, #6F6F6F , #414141)"
@@ -58,6 +108,23 @@
         >
       </div>
       <!-- <div class="experience-date">剩余体验时长：{{remainingTime||0}}分钟</div> -->
+    </div>
+     <div class="toggle-order"  v-if="type">
+      <div class="toggle-order-btn">
+      <van-button
+        block
+        :color="orderType==1?'#999':''"
+        @click="toggleOrder(1)"
+        >固定模式下单</van-button
+      >
+      </div>
+      <div class="toggle-order-btn">
+      <van-button
+       :color="orderType==2?'#999':''"
+        block
+           @click="toggleOrder(2)"
+        >自定义下单</van-button>
+        </div>
     </div>
     <div class="line"></div>
     <div class="business-content">
@@ -114,7 +181,7 @@
               >
             </div>
           </div>
-          <!-- <div class="second_level_title" v-show="list2.length > 0">
+          <div class="second_level_title" v-show="list2.length > 0">
             三级分类
           </div>
           <div class="level_three_content">
@@ -149,7 +216,7 @@
                 >{{ el.projectName }}</van-button
               >
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -181,10 +248,13 @@ export default {
       second_level_active1: 0,
       remainingTime: 0,
       moenyTotal: 0,
+      type: null,
+      orderType: 1,
     };
   },
   created() {
-    document.title = "商家主页";
+    document.title = this.$route.query.type ? "选择分类" : "商家主页";
+    this.type  = this.$route.query.type || null
     this.getEquipmentList();
     this.getProjectList();
     this.getMoneyUnsettled();
@@ -192,6 +262,18 @@ export default {
     // console.log(new Date().getDate());
   },
   methods: {
+    // 切换下单模式
+    toggleOrder(type) {
+      this.orderType = type;
+      switch (type) {
+        case 1:
+          break;
+
+        case 2:
+          this.$router.push("teacher")
+          break;
+      }
+    },
     getMoneyUnsettled() {
       moneyUnsettled({
         businessId: this.userInfo.businessId,
@@ -267,7 +349,7 @@ export default {
               }
               resolve(res.data);
             } else {
-              this.$router.push({ path: "subOrder", query: { projectName } });
+              this.$router.push({ path: "subOrder", query: { projectName,type:this.type,projectId: parentId } });
               // this.$router.push({
               //   path: "projectDetails",
               //   query: { projectId: parentId },
@@ -519,5 +601,61 @@ export default {
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
   color: rgba(73, 73, 73, 1);
+}
+.toggle-order{
+  display: flex;
+  border: 1px solid #999;
+  margin-top: 100px;
+}
+.toggle-order-btn{
+  width: 50%;
+  height: 100px;
+  color: #666;
+}
+
+.add-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(111, 111, 111, 1) 0%,
+    rgba(65, 65, 65, 1) 100%
+  );
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  z-index: 9999;
+}
+.add-order {
+  width: 200px;
+  height: 100%;
+}
+.add-btn {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  height: 100%;
+}
+.add-btn .van-button--block {
+  width: 145px;
+}
+.add-nav .van-button--round {
+  border-radius: 20px;
+}
+.add-nav .van-button::before {
+  border-radius: 20px;
+}
+.add-nav .van-button::after {
+  border: 0;
+}
+.add-quit img {
+  width: 50px;
+  height: 40px;
+  /* border-radius: 50%; */
 }
 </style>

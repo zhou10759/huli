@@ -141,6 +141,7 @@ export default {
             el.status = 0;
           });
           this.orderList = res.data;
+          this.total = res.count
         }
       });
     },

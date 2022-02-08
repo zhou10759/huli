@@ -12,7 +12,7 @@
           >所有订单</van-button
         >
       </div>
-      <div class="add-btn" v-if="teacherType === 0">
+      <div class="add-btn" v-if="teacherType == 0">
         <van-button
           plain
           hairline
@@ -56,7 +56,9 @@
         <div class="form-items">
           <div class="flex">
             <div class="form-title">老师ID</div>
-            <span v-if="teacherType==1" class="available">可用时间：{{ availableDate }}分钟</span>
+            <span v-if="teacherType == 1" class="available"
+              >可用时间：{{ availableDate }}分钟</span
+            >
           </div>
           <van-cell-group>
             <van-field
@@ -107,7 +109,7 @@
       </div>
     </div>
     <div class="project-message">
-      <div class="form-items" v-if="teacherType!=1">
+      <div class="form-items">
         <div class="form-title">体 验 订 单</div>
         <van-cell-group>
           <van-checkbox v-model="experience">是否为体验订单</van-checkbox>
@@ -156,7 +158,6 @@
             <van-field
               type="digit"
               v-model="projectList.projectNum"
-              :disabled="teacherType === 1"
               placeholder="请输入项目次数"
             />
           </van-cell-group>
@@ -167,7 +168,6 @@
             <van-field
               type="digit"
               v-model="projectList.projectTime"
-              :disabled="teacherType === 1"
               placeholder="请输入项目时长"
             />
           </van-cell-group>
@@ -249,8 +249,12 @@ import {
   rangeList,
   getDistributorTime,
 } from "../../api/index/index";
+import subOrder from "../businessPage/subOrder.vue";
 import { Toast } from "vant";
 export default {
+  components: {
+    subOrder,
+  },
   data() {
     return {
       teacherId: "",
@@ -279,42 +283,43 @@ export default {
       },
       experience: false,
       isBtnStatus: null, //0为到店 1为离店
-      teacherType: JSON.parse(localStorage.getItem("userInfo")).teacherType,
+      teacherType: "",
       getPriceType: false,
       availableDate: 0
     };
   },
   watch: {
-    "projectList.projectMoney": {
-      handler: function (val, oldval) {
-        //do something
-        if (JSON.parse(localStorage.getItem("userInfo")).teacherType === 1) {
-          //经销商老师
-          rangeList({
-            price: parseInt(val),
-            provincialId: JSON.parse(localStorage.getItem("userInfo"))
-              .provincialId,
-          }).then((res) => {
-            if (res.code === "000000") {
-              this.projectList.projectNum = res.data.totalTimes;
-              this.projectList.projectTime = res.data.everyTime;
-              this.getPriceType = true;
-            } else if (res.code === "000001") {
-              this.projectList.projectNum = "";
-              this.projectList.projectTime = "";
-              this.getPriceType = false;
-            } else {
-              this.getPriceType = false;
-            }
-          });
-        }
-      },
-    },
+    // "projectList.projectMoney": {
+    //   handler: function (val, oldval) {
+    //     //do something
+    //     if (JSON.parse(localStorage.getItem("userInfo")).teacherType === 1) {
+    //       //经销商老师
+    //       rangeList({
+    //         price: parseInt(val),
+    //         provincialId: JSON.parse(localStorage.getItem("userInfo"))
+    //           .provincialId,
+    //       }).then((res) => {
+    //         if (res.code === "000000") {
+    //           this.projectList.projectNum = res.data.totalTimes;
+    //           this.projectList.projectTime = res.data.everyTime;
+    //           this.getPriceType = true;
+    //         } else if (res.code === "000001") {
+    //           this.projectList.projectNum = "";
+    //           this.projectList.projectTime = "";
+    //           this.getPriceType = false;
+    //         } else {
+    //           this.getPriceType = false;
+    //         }
+    //       });
+    //     }
+    //   },
+    // },
   },
   created() {
     document.title = "老师自定义模式";
     this.teacherId = JSON.parse(localStorage.getItem("userInfo")).userPhone;
     this.business = JSON.parse(localStorage.getItem("userInfo")).businessId;
+    this.teacherType =  JSON.parse(localStorage.getItem("userInfo")).teacherType || ""
     // console.log("this.teacherId",this.teacherId,this.business)
     // this.getbusinessList();
     this.openEquipmentList();
@@ -443,10 +448,10 @@ export default {
           Toast.fail("请输入项目金额");
           return;
         }
-        if (!this.getPriceType && this.teacherType === 1) {
-          Toast.fail("项目价格不在价格区间");
-          return;
-        }
+        // if (!this.getPriceType && this.teacherType === 1) {
+        //   Toast.fail("项目价格不在价格区间");
+        //   return;
+        // }
         query = {
           orderName: this.projectList.projectName,
           orderType: 1,
@@ -619,7 +624,7 @@ export default {
   font-size: 0.366667rem;
   color: red;
 }
-.flex{
+.flex {
   display: flex;
   justify-content: space-between;
   align-content: center;
